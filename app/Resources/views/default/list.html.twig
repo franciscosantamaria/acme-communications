@@ -35,7 +35,7 @@
                             <td>{{ mainNumber }}</td>
                             <td><span class="glyphicon glyphicon-{{ inOutClass }}" aria-hidden="true"></span></td>
                             <td>{{ communication.dateTime|date('d-m-Y H:i:s') }}</td>
-                            <td>{{ communication.duration|default('-') }}</td>
+                            <td>{% if communication.duration is not null%} {{ communication.duration|prettyDuration }}{% else %}-{% endif %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
