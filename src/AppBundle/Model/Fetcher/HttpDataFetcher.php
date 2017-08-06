@@ -5,7 +5,9 @@ namespace AppBundle\Model\Fetcher;
 
 use AppBundle\Model\CommunicationFactory;
 use AppBundle\Model\Exception\FetcherException;
+use AppBundle\Model\Exception\NotDataFoundException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerInterface;
 
@@ -49,13 +51,15 @@ class HttpDataFetcher implements DataFetcher
                 'GET',
                 $this->baseUrl . "/communications.$number.log"
             );
+        } catch (BadResponseException $e) {
+            if ($e->getResponse()->getStatusCode() == 404) {
+                throw new NotDataFoundException('Not data found for this number');
+            } else {
+                throw new FetcherException('There was an error retrieving the data');
+            }
         } catch (GuzzleException $e) {
             $this->logger->error($e->getMessage());
             throw new FetcherException($e->getMessage());
-        }
-
-        if ($response->getStatusCode() != 200) {
-            throw new FetcherException("Not data found for this number");
         }
 
         $communications = $this->extractCommunications($response->getBody(), $types);
@@ -75,6 +79,7 @@ class HttpDataFetcher implements DataFetcher
                     $communication = $this->communicationFactory->createCommunication($line);
                 } catch (FetcherException $e) {
                     $this->logger->error($e->getMessage());
+                    continue;
                 }
                 $communications[] = $communication;
             }

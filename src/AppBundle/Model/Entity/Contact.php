@@ -10,6 +10,9 @@ class Contact
      */
     private $name;
 
+    /**
+     * @var Communication[]
+     */
     private $communications = [];
 
     /**
@@ -40,6 +43,4 @@ class Contact
     {
         return $this->communications;
     }
-
-
 }

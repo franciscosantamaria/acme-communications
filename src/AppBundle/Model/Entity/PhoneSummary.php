@@ -18,7 +18,7 @@ class PhoneSummary
         $this->communications = $communications;
     }
 
-    public function getCommunicationsGroupedByContact()
+    public function getCommunicationsGroupedByContact(): array
     {
         $contacts = [];
 
@@ -35,7 +35,7 @@ class PhoneSummary
         return $contacts;
     }
 
-    private function getContact($contactName, $contacts)
+    private function getContact(string $contactName, array $contacts)
     {
         foreach ($contacts as $contact) {
             if ($contact->getName() == $contactName) {

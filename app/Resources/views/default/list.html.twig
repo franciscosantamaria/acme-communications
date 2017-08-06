@@ -1,21 +1,46 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Summary for your  number: {{ number }}</h1>
-    {% for contact in contacts %}
-        <h3>{{ contact.name }}</h3>
-        {% for communication in contact.communications %}
-            {% if  communication.communicationType == 'incoming'%}
-                {% set mainNumber = communication.sender %}
-            {% else %}
-                {% set mainNumber = communication.receiver %}
-            {% endif %}
-            <p>{{ communication.type }} | {{ mainNumber }} | {{ communication.dateTime|date('d-m-Y H:i:s') }} | {{ communication.duration|default('-') }}</p>
+    <div class="container">
+        <h1>Summary for number: {{ number }}</h1>
+        {% for contact in contacts %}
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ contact.name }}</div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Number</th>
+                        <th>In/out</th>
+                        <th>Datetime</th>
+                        <th>Duration</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for communication in contact.communications %}
+                        {% if  communication.communicationType == 'incoming'%}
+                            {% set mainNumber = communication.sender %}
+                            {% set inOutClass = 'import' %}
+                        {% else %}
+                            {% set mainNumber = communication.receiver %}
+                            {% set inOutClass = 'export' %}
+                        {% endif %}
+                        {% if  communication.type == 'call' %}
+                            {% set typeClass = 'earphone' %}
+                        {% elseif  communication.type == 'sms' %}
+                            {% set typeClass = 'envelope' %}
+                        {% endif %}
+                        <tr>
+                            <td><span class="glyphicon glyphicon-{{ typeClass }}" aria-hidden="true"></span></td>
+                            <td>{{ mainNumber }}</td>
+                            <td><span class="glyphicon glyphicon-{{ inOutClass }}" aria-hidden="true"></span></td>
+                            <td>{{ communication.dateTime|date('d-m-Y H:i:s') }}</td>
+                            <td>{{ communication.duration|default('-') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% endfor %}
-    {% endfor %}
+    </div>
 {% endblock %}
-
-{% block stylesheets %}
-
-{% endblock %}
-

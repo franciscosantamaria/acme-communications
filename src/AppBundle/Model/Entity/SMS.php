@@ -5,11 +5,13 @@ namespace AppBundle\Model\Entity;
 
 class SMS extends Communication
 {
-    /**
-     * PhoneCall constructor.
-     */
-    public function __construct($sender, $receiver, $communicationType, $contactName, $dateTime)
-    {
+    public function __construct(
+        string $sender,
+        string $receiver,
+        string $communicationType,
+        string $contactName,
+        \DateTimeInterface $dateTime
+    ) {
         parent::__construct('sms', $sender, $receiver, $communicationType, $contactName, $dateTime);
     }
 }

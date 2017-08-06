@@ -24,7 +24,7 @@ class HttpCommunicationFactory extends CommunicationFactory
                 return new PhoneCall(
                     $fields['sender'],
                     $fields['receiver'],
-                    $fields['comType'] === 0 ? Communication::OUTGOING: Communication::INCOMING,
+                    $fields['comType'] == 0 ? Communication::OUTGOING: Communication::INCOMING,
                     trim($fields['contactName']),
                     \DateTime::createFromFormat('dmYHis', $fields['dateTime']),
                     ltrim($fields['duration'],'0')
@@ -35,7 +35,7 @@ class HttpCommunicationFactory extends CommunicationFactory
                 return new SMS(
                     $fields['sender'],
                     $fields['receiver'],
-                    $fields['comType'] === 0 ? Communication::OUTGOING: Communication::INCOMING,
+                    $fields['comType'] == 0 ? Communication::OUTGOING: Communication::INCOMING,
                     trim($fields['contactName']),
                     \DateTime::createFromFormat('dmYHis', $fields['dateTime'])
                 );

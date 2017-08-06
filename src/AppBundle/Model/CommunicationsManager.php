@@ -6,6 +6,7 @@ use AppBundle\Model\Entity\PhoneSummary;
 use AppBundle\Model\Exception\CommunicationsException;
 use AppBundle\Model\Exception\FetcherException;
 use AppBundle\Model\Exception\InvalidNumberFormat;
+use AppBundle\Model\Exception\NotDataFoundException;
 use AppBundle\Model\Fetcher\DataFetcher;
 use Psr\Log\LoggerInterface;
 
@@ -38,6 +39,9 @@ class CommunicationsManager
 
         try {
             $communications = $this->dataFetcher->getCommunications($number, $this->types);
+        } catch (NotDataFoundException $e) {
+            $this->logger->error($e->getMessage());
+            throw new CommunicationsException('There is no data for this number');
         } catch (FetcherException $e) {
             $this->logger->error($e->getMessage());
             throw new CommunicationsException();
@@ -49,6 +53,7 @@ class CommunicationsManager
     private function isValidNumber(string $number): bool
     {
         //TODO I know this is a weak check
+
         return (preg_match('/^[0-9]{9}$/', $number) === 1) ? true : false;
     }
 

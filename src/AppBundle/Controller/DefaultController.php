@@ -30,7 +30,11 @@ class DefaultController extends Controller
         $number = $request->request->get('phone');
 
         if ($number == null) {
-            return new Response('Invalid number');
+            $this->addFlash(
+                'error',
+                'You must enter a valid number'
+            );
+            return $this->redirectToRoute('homepage');
         }
 
         $acmeCommunicationsManager = $this->container->get('AppBundle\Model\CommunicationsManager');
@@ -38,9 +42,11 @@ class DefaultController extends Controller
         try {
             $summary = $acmeCommunicationsManager->getInfo($number);
         } catch (InvalidNumberFormat $e) {
-            return new Response("The number has an invalid format");
+            $this->addFlash('error', 'The number has an invalid format');
+            return $this->redirectToRoute('homepage');
         } catch (CommunicationsException $e) {
-            return new Response("Sorry, there was a problem retrieving your info. Try it later");
+            $this->addFlash('error', $e->getMessage());
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('default/list.html.twig', [

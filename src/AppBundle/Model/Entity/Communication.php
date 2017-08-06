@@ -18,9 +18,6 @@ class Communication
     private $duration;
     private $communicationType;
 
-    /**
-     * PhoneCall constructor.
-     */
     public function __construct($type, $sender, $receiver, $communicationType, $contactName, $dateTime, $duration = null)
     {
         $this->type = $type;
