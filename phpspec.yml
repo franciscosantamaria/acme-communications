@@ -1,0 +1,5 @@
+suites:
+    acme_comunications_suite:
+        namespace: AppBundle
+        psr4_prefix: AppBundle
+        src_path: %paths.config%/src/AppBundle

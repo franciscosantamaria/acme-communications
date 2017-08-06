@@ -2,7 +2,7 @@
 
 {% block body %}
 <p>Welcome to ACME Comunitations, please fill the textbox with your phone to show you your history calls:</p>
-    <form action="">
+    <form action="{{ path('listpage') }}" method="post">
         <input type="text" name="phone" placeholder="XXXXXXXXX"/>
         <input type="submit" value="Send"/>
     </form>

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Summary for your  number: {{ number }}</h1>
+    {% for contact in contacts %}
+        <h3>{{ contact.name }}</h3>
+        {% for communication in contact.communications %}
+            {% if  communication.communicationType == 'incoming'%}
+                {% set mainNumber = communication.sender %}
+            {% else %}
+                {% set mainNumber = communication.receiver %}
+            {% endif %}
+            <p>{{ communication.type }} | {{ mainNumber }} | {{ communication.dateTime|date('d-m-Y H:i:s') }} | {{ communication.duration|default('-') }}</p>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
